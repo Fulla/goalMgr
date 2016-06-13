@@ -1,0 +1,26 @@
+div(ng-controller="viewGoalCtrl as goal")
+  
+  h2("Detalles del objetivo") 
+  
+  label Descripción del objetivo
+  input(type="text" ng-model="goal.currgoal.name")
+  
+  label Prioridad
+  select(ng-model="goal.currgoal.priority")
+  
+  button(ng-click="goal.editgoal()") Guardar cambios
+  
+  div
+    p("Alternativas para el objetivo")
+    
+    ul("")
+      li(ng-repeat="alt in goal.alternatives")
+        p(alt.description)
+  
+  
+  div
+    p("Este objetivo es un subobjetivo para: ")
+    
+    ul("")
+      li(ng-repeat="mo in goal.meta")
+        p("{{mo.goal.name}}, a traves de la alternativa {{mo.alternative.description}}")

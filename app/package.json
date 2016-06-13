@@ -1,0 +1,31 @@
+{
+  "name": "meancoffeetest",
+  "version": "1.0.0",
+  "description": "MEAN with coffeescript for learning purposes",
+  "main": "./app/app.coffee",
+  "scripts": {
+    "start": "coffee app.coffee",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "coffee-script": "^1.6.3",
+    "express": "~4.5.1",
+    "js2coffee": "^2.2.0",
+    "pg": "^4.5.6",
+    "pg-hstore": "^2.3.2",
+    "pug": "^2.0.0-beta2",
+    "sequelize": "^3.23.3"
+  },
+  "keywords": [
+    "test",
+    "learning",
+    "MEAN",
+    "coffeescript"
+  ],
+  "author": "Santiago Fulladoza",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "sequelize-cli": "^2.4.0"
+  }
+}

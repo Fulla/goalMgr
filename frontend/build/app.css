@@ -1,0 +1,14 @@
+.header,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.container {
+  /*background-color: red;*/
+}
+
+
+.listblock {
+  border-bottom: 1px solid #e5e5e5;
+}

@@ -1,0 +1,33 @@
+div(ng-controller='goalsCtrl as goals')
+  h2 Objetivos 
+  
+  div(class="listblock")
+    h3 Objetivos de alto nivel
+    ul("")
+      li(ng-repeat="tg in goals.topgoals")
+        p Goal description: {{tg.name}}
+        p Goal priority: {{tg.priority}}
+        p Creation date: {{th.creatdate}}
+        p Achieved: {{tg.achieved}}
+        button(ng-click='goals.viewDetails(tg.id)') Ver objetivo
+      
+    button(ng-click='goals.newGoal()') Nuevo objetivo
+  
+  div(class="listblock")    
+    h3 Objetivos pendientes
+    ul("")
+      li(ng-repeat="tg in goals.topgoals")
+        p Goal description: {{tg.name}}
+        p Goal priority: {{tg.priority}}
+        p Creation date: {{tg.creatdate}}
+        button(ng-click="goals.viewDetails(tg.id)") Ver objetivo
+        //- ver de dar las opciones de ordenar por *creatdate *priority 
+      
+  div(class="listblock")
+    h3 Ultimos objetivos conseguidos
+    ul("")
+      li(ng-repeat="tg in goals.topgoals")
+        p Goal description: {{tg.name}}
+        p Goal priority: {{tg.priority}}
+        p Date of achievement: {{tg.achdate}}
+        button(ng-click="goals.viewDetails(tg.id)") Ver objetivo
