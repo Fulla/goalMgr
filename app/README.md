@@ -2,6 +2,7 @@
 
 * A "goal" may have "alternative" solutions
 * An "alternative" is composed by one or more sub"goals"
+* A "goal" may act as subgoal in 0 or more alternatives (hence the goal-alternative relation)
 
 - A goal is completed if (at least) an alternative is completed
 - An alternative is completed if all the subgoals are completed
@@ -17,10 +18,16 @@ goal =
 alternative = 
 	{
 	  description,
+	  goalId (foreignKey),
 	  subgoals (num of subgoals),
 	  achSubgoals (num of achieved subgoals)
 	}
 
+goal-alternative =
+	{
+	  goalId,
+	  alternativeId
+	}
 
 ## Features
 
