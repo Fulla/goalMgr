@@ -13,6 +13,7 @@ goal =
 	  achieved (boolean),
 	  from_alternative (null for top level goals)
 	}
+	
 alternative = 
 	{
 	  description,
