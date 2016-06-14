@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) ->
       name: DataTypes.STRING,
       priority: DataTypes.INTEGER,
       achieved: DataTypes.BOOLEAN,
-      creatdate: DataTypes.DATE,
       achdate: DataTypes.DATE,
       achobserv: DataTypes.STRING
       },

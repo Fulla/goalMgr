@@ -1,17 +1,15 @@
 div(ng-controller="addAlterCtrl as addalt")
-  h2 Esta es la pagina para crear un nuevo objetivo
-  div  
-    h3 Alternativa para el objetivo {{addalt.alter.goalId}}
-    
-    label Descripcion de la alternativa
+  h2 New solution option for goal {{addalt.alter.goalId}}
+  div      
+    label Description for the solution option: 
     input(type="text" ng-model="addalt.alter.description")
     
-    label Agregar nueva condición ("subobjetivo"):
+    label Add new subgoal for solution completion:
     button(ng-click="addalt.addGoal()") 
     
-    button(ng-click="addalt.createAlter()") Crear alternativa
+    button(ng-click="addalt.createAlter()") Save option
     
   div
-    h3 Seleccionar una condicion para la alternativa
+    h3 Select a subgoal:
     
     div(ng-model="addalt.grid")

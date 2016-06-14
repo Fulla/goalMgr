@@ -1,13 +1,16 @@
 div(ng-controller="addGoalCtrl as addgoal")
+  h2 New goal
   
-  h2 Esta es la pagina para crear un nuevo objetivo
-  
-  label Descripcion del objetivo
-  input(type="text",ng-model="addgoal.newgoal.name")
-  
-  label Prioridad
-  select(ng-model="addgoal.newgoal.priority" ng-options="pri in addgoal.priorities")
-  
-  button(ng-click="addgoal.createGoal()") Crear objetivo
-  
-  //- Esto puede venir desde el "agregar un nuevo subobjetivo para esta alternativa" o desde "agregar un nuevo top-objetivo"
+  div(class="formblock")
+    div(class="formelem")
+      label Goal description: 
+      input(type="text",ng-model="addgoal.newgoal.name")
+      
+    div(class="formelem")
+      label Priority: 
+      select(ng-model="addgoal.newgoal.priority", ng-options="pri for pri in addgoal.priorities")
+    
+    div(class="formelem")
+      button(ng-click="addgoal.createGoal()") Create goal
+    
+    //- Esto puede venir desde el "agregar un nuevo subobjetivo para esta alternativa" o desde "agregar un nuevo top-objetivo"

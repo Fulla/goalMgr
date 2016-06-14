@@ -1,3 +1,9 @@
 app/node_modules
 frontend/node_modules
 frontend/bower_components
+frontend/.tmp
+frontend/.sass-cache
+*.pyc
+*~
+*.swp
+*.log

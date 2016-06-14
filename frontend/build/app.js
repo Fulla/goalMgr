@@ -11,6 +11,9 @@ angular.module('goalmgr', ['ngRoute', 'frontend-main', 'templates']).config(func
   }).when('/alternatives/new', {
     templateUrl: 'views/newAlternative.html',
     controllerAs: 'addAlterCtrl'
+  }).when('/goals/:goalid', {
+    templateUrl: 'views/goal.html',
+    controllerAs: 'viewGoalCtrl'
   }).otherwise({
     redirectTo: '/goals'
   });
@@ -53,28 +56,28 @@ angular.module('goalmgr').controller('alterCtrl', ['altSvc', function(altSvc) {}
 
 angular.module('goalmgr').controller('goalsCtrl', [
   'goalSvc', '$location', function(goalSvc, $location) {
-    var goals;
-    goals = this;
+    var goalctrl;
+    goalctrl = this;
     this.topgoals = [];
     this.pendant = [];
     this.lastachiev = [];
     this.gettopgoals = function() {
       goalSvc.getTop().then((function(data) {
-        return goals.topgoals = data;
+        return goalctrl.topgoals = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los objetivos de alto nivel");
       }));
     };
     this.getpendant = function() {
       goalSvc.getPendant().then((function(data) {
-        return goals.pendant = data;
+        return goalctrl.pendant = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los objetivos pendientes");
       }));
     };
     this.getlastachieved = function() {
       goalSvc.getLastAchieved().then((function(data) {
-        return goals.lastachiev = data;
+        return goalctrl.lastachiev = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los últimos objetivos conseguidos");
       }));
@@ -82,54 +85,59 @@ angular.module('goalmgr').controller('goalsCtrl', [
     this.newGoal = function() {
       $location.path('goals/new');
     };
-    goals.gettopgoals();
-    goals.getpendant();
-    goals.getlastachieved();
+    goalctrl.gettopgoals();
+    goalctrl.getpendant();
+    goalctrl.getlastachieved();
+    this.viewDetails = function(goalid) {
+      return $location.path('goals/' + goalid);
+    };
   }
 ]).controller('addGoalCtrl', [
   'goalSvc', '$location', function(goalSvc, $location) {
-    var addgoal;
-    addgoal = this;
+    var goalsctrl;
+    goalsctrl = this;
     this.newgoal = {
       name: "",
       priority: 0,
       achieved: false
     };
-    this.priorities = ['alta', 'media', 'baja'];
-    return this.createGoal = function() {
-      return goalSvc.add(addgoal.newgoal).then(function(data) {
-        return $location.path('editgoal');
+    this.priorities = ['high', 'regular', 'low'];
+    this.createGoal = function() {
+      goalSvc.add(goalctrl.newgoal).then(function(data) {
+        $location.path('editgoal');
       });
     };
   }
 ]).controller('viewGoalCtrl', [
-  'goalSvc', 'altSvc', '$location', function(goalSvc, altSvc, $location) {
-    var goal;
-    goal = this;
-    this.currgoal = null;
+  'goalSvc', 'altSvc', '$location', '$routeParams', function(goalSvc, altSvc, $location, $routeParams) {
+    var goalctrl;
+    goalctrl = this;
+    this.goal = null;
     this.alternatives = [];
     this.meta = [];
+    this.currgoal = $routeParams.goalid;
+    this.priorities = ['high', 'regular', 'low'];
     this.getgoal = function() {
       return goalScv.getById().then(function(data) {
-        var currgoal;
-        currgoal = data;
-        return goal.getalternatives();
+        var goal;
+        goal = data;
+        return goalctrl.getalternatives();
       });
     };
     this.getalternatives = function() {
-      return altSvc.getForGoal(this.currgoal.id).then(function(data) {
-        return goal.alternatives = data;
+      return altSvc.getForGoal(this.currgoal).then(function(data) {
+        return goalctrl.alternatives = data;
       });
     };
     this.editgoal = function() {
-      return goalSvc.update(goal.currgoal).then(function(data) {});
+      return goalSvc.update(goalctrl.goal).then(function(data) {});
     };
     this.addAlternative = function() {
       return $location.path('alternatives/new');
     };
-    return this.getmetagoals = function() {
+    this.getmetagoals = function() {
       return goalSvc.getMeta().then(function(data) {
-        return goal.meta = data;
+        return goalctrl.meta = data;
       });
     };
   }

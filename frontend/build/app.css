@@ -1,14 +1,27 @@
-.header,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-.container {
-  /*background-color: red;*/
-}
-
-
 .listblock {
   border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10px;
+  margin-left: 30px;
+  padding-bottom: 20px;
+}
+.container {
+  margin-left: 20px;
+}
+body {
+  padding-left: 50px;
+  width: 1100px;
+  height: 700px;
+  overflow: auto;
+}
+.formblock {
+  display: flex;
+  flex-direction: column;
+}
+.formelem {
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 5px;
+}
+label {
+  margin-right: 5px;
 }

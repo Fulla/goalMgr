@@ -14,6 +14,9 @@ angular.module 'goalmgr', [ 'ngRoute','frontend-main','templates' ]
       .when '/alternatives/new',
         templateUrl: 'views/newAlternative.html'
         controllerAs: 'addAlterCtrl'
+      .when '/goals/:goalid',
+        templateUrl: 'views/goal.html'
+        controllerAs: 'viewGoalCtrl'
       .otherwise
         redirectTo: '/goals'
     return
