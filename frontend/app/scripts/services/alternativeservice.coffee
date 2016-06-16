@@ -6,6 +6,7 @@ angular.module 'goalmgr'
       goalSvc = this
       genericReq = (httpRequest) ->
         deferred = $q.defer()
+        httpRequest.headers = httpRequest.headers || 'Content-Type':'application/json'
         $http(httpRequest)
         .success (data,status,headers,config) ->
           deferred.resolve data

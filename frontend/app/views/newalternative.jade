@@ -1,15 +1,26 @@
-div(ng-controller="addAlterCtrl as addalt")
-  h2 New solution option for goal {{addalt.alter.goalId}}
-  div      
-    label Description for the solution option: 
-    input(type="text" ng-model="addalt.alter.description")
-    
-    label Add new subgoal for solution completion:
-    button(ng-click="addalt.addGoal()") 
-    
-    button(ng-click="addalt.createAlter()") Save option
-    
-  div
+div(ng-controller="addAlterCtrl as altctrl")
+
+  h2 New solution option for goal <{{ altctrl.supergoal.name }}>
+  
+  div(class='panel')
+    div(class='listblock formblock')      
+      label Description for the solution option: 
+      input(type="text" ng-model="altctrl.alter.description")
+    div(class='listblock')  
+      label Add new subgoal for solution completion:
+      button(ng-click="altctrl.addGoal()") Add subgoal
+    div(class='listblock')
+      label Solution option preview:
+      div(class='preview')
+        label {{ altctrl.alter.description }}
+        ul 
+          li(ng-repeat="sub in altctrl.alter.Subgoals") {{ sub.name }}
+            button(ng-click="altctrl.removeSub(sub.id)") Remove
+    div(class='listblock')
+      //- label Save solution option and return to supergoal description
+      button(ng-click="altctrl.createAlter()") Save option
+      button(ng-click="altctrl.back()") Cancel
+  div(class='panel')
     h3 Select a subgoal:
     
-    div(ng-model="addalt.grid")
+    //- div(ng-model="altctrl.grid")

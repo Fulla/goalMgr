@@ -2,25 +2,34 @@ div(ng-controller="viewGoalCtrl as goalctrl")
   
   h2("Detalles del objetivo") 
   
-  label Goal description
-  input(type="text" ng-model="goal.currgoal.name")
+  div(class="formblock listblock")
+    div(class="formelem")
+      label Goal description:
+      input(type="text" ng-model="goalctrl.goal.name")
+      
+    div(class="formelem")
+      label Priority:
+      select(ng-model="goalctrl.goal.priority" ng-options="pri.id as pri.name for pri in goalctrl.priorities")
+    
+    div(class="formelem")
+      button(ng-click="goalctrl.editgoal()") Save changes
+      button(ng-click="goalctrl.back()") Back
   
-  label Priority
-  select(ng-model="goal.currgoal.priority")
-  
-  button(ng-click="goal.editgoal()") Save changes
-  
-  div
-    p Goal solution options
+  div(class="listblock")
+    h3 Goal solution options:
     
     ul("")
-      li(ng-repeat="alt in goal.alternatives")
+      li(ng-repeat="alt in goalctrl.alternatives")
         p(alt.description)
   
+    button(ng-click="goalctrl.addAlternative()") Add option
   
-  div
-    p Current goals is a subgoal for:
+  div(class="listblock")
+    h3 Current goal is a subgoal for:
     
-    ul("")
-      li(ng-repeat="mo in goal.meta")
-        p("{{mo.goal.name}}, through the solution option {{mo.alternative.description}}")
+    ul
+      li(ng-repeat="mo in goalctrl.meta")
+        p {{mo.goal.name}},
+        a(ng-click="goalctrl.gotogoal(mo.goal.id)") See here 
+        | through the solution option {{mo.alternative.description}}
+        a(ng-click="goalctrl.gotogoal(mo.alternative.id)") See here

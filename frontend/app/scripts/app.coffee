@@ -5,16 +5,16 @@ angular.module 'goalmgr', [ 'ngRoute','frontend-main','templates' ]
       .when '/goals',
         templateUrl: 'views/goalslist.html'
         controllerAs: 'goalsCtrl'
-      .when '/alternatives',
-        templateUrl: 'views/viewalternative.html'
-        controllerAs: 'alterCtrl'
       .when '/goals/new',
         templateUrl: 'views/newgoal.html'
         controllerAs: 'addGoalCtrl'
       .when '/alternatives/new',
-        templateUrl: 'views/newAlternative.html'
+        templateUrl: 'views/newalternative.html'
         controllerAs: 'addAlterCtrl'
-      .when '/goals/:goalid',
+      .when '/alternatives/:altid',
+        templateUrl: 'views/alternative.html'
+        controllerAs: 'alterCtrl'
+      .when '/goals/view',
         templateUrl: 'views/goal.html'
         controllerAs: 'viewGoalCtrl'
       .otherwise

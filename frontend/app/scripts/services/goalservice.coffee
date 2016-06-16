@@ -4,8 +4,11 @@ angular.module 'goalmgr'
 .service 'goalSvc', ['$q', '$http', 'API_SERVER',
   ($q, $http, API_SERVER) ->
       goalSvc = this
+      this.currentgoal = null #the goal that is currently in scope
+
       genericReq = (httpRequest) ->
         deferred = $q.defer()
+        httpRequest.headers = httpRequest.headers || 'Content-Type':'application/json'
         $http(httpRequest)
         .success (data,status,headers,config) ->
           deferred.resolve data
@@ -48,4 +51,20 @@ angular.module 'goalmgr'
           method: 'DELETE'
           url: 'http://'+API_SERVER+'/goals/'+id
         genericReq(httpReq)
+      update: (goal) ->
+        httpReq =
+          method: 'PUT'
+          url: 'http://'+API_SERVER+'/goals/'+goal.id
+          data: goal
+        genericReq(httpReq)
+      getMeta: (id) ->
+        httpReq =
+          method: 'GET'
+          url: 'http://'+API_SERVER+'/goals/meta/'+id
+        genericReq(httpReq)
+      setCurrent: (goal) ->
+        goalSvc.currentgoal = goal
+        return
+      getCurrent: () ->
+        goalSvc.currentgoal
 ]

@@ -2,12 +2,12 @@ div(ng-controller='goalsCtrl as goals')
   h2 Goals summary
   
   div(class="listblock")
-    h3 Top-level goals:
+    h3 Top-level goals (i.e., that are not subgoals of any other goal):
     ul("")
       li(ng-repeat="tg in goals.topgoals")
         p Goal description: {{tg.name}}
         p Goal priority: {{tg.priority}}
-        p Creation date: {{th.creatdate}}
+        p Creation date: {{tg.createdAt}}
         p Achieved: {{tg.achieved}}
         button(ng-click='goals.viewDetails(tg.id)') Details
       
@@ -16,7 +16,7 @@ div(ng-controller='goalsCtrl as goals')
   div(class="listblock")    
     h3 Pendant goals: 
     ul("")
-      li(ng-repeat="tg in goals.topgoals")
+      li(ng-repeat="tg in goals.pendant")
         p Goal description: {{tg.name}}
         p Goal priority: {{tg.priority}}
         p Creation date: {{tg.creatdate}}
@@ -26,7 +26,7 @@ div(ng-controller='goalsCtrl as goals')
   div(class="listblock")
     h3 Last achieved goals: 
     ul("")
-      li(ng-repeat="tg in goals.topgoals")
+      li(ng-repeat="tg in goals.lastachiev")
         p Goal description: {{tg.name}}
         p Goal priority: {{tg.priority}}
         p Date of achievement: {{tg.achdate}}

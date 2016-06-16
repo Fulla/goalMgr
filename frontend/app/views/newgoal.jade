@@ -8,7 +8,7 @@ div(ng-controller="addGoalCtrl as addgoal")
       
     div(class="formelem")
       label Priority: 
-      select(ng-model="addgoal.newgoal.priority", ng-options="pri for pri in addgoal.priorities")
+      select(ng-model="addgoal.newgoal.priority", ng-options="pri.id as pri.name for pri in addgoal.priorities")
     
     div(class="formelem")
       button(ng-click="addgoal.createGoal()") Create goal

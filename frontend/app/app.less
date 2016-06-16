@@ -1,3 +1,6 @@
+@container-height: 100vh - 200px;
+@container-width: 100vw - 200px;
+
 .listblock {
   border-bottom: 1px solid #e5e5e5;
   margin-bottom: 10px;
@@ -6,14 +9,26 @@
 }
 
 .container {
-  margin-left: 20px;
+  height: @container-height;
+  width: @container-width;
+  // margin-left: 20px;
+  display: flex;
+  flex-direction: row;
   // background-color: red;
+}
+
+.panel {
+  height: @container-height;
+  flex-grow: 1;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
   padding-left: 50px;
-  width: 1100px;
-  height: 700px;
+  // width: 1100px;
+  // height: 700px;
   overflow: auto;
 }
 
@@ -26,6 +41,13 @@ body {
   flex-grow: 1;
   flex-shrink: 1;
   padding: 5px;
+}
+
+.preview {
+  margin: 5px 10px;
+  padding: 3px;
+  background-color: lightgrey;
+  border: 1px outset darkgrey;
 }
 
 label {

@@ -2,16 +2,16 @@ angular.module('goalmgr', ['ngRoute', 'frontend-main', 'templates']).config(func
   $routeProvider.when('/goals', {
     templateUrl: 'views/goalslist.html',
     controllerAs: 'goalsCtrl'
-  }).when('/alternatives', {
-    templateUrl: 'views/viewalternative.html',
-    controllerAs: 'alterCtrl'
   }).when('/goals/new', {
     templateUrl: 'views/newgoal.html',
     controllerAs: 'addGoalCtrl'
   }).when('/alternatives/new', {
-    templateUrl: 'views/newAlternative.html',
+    templateUrl: 'views/newalternative.html',
     controllerAs: 'addAlterCtrl'
-  }).when('/goals/:goalid', {
+  }).when('/alternatives/:altid', {
+    templateUrl: 'views/alternative.html',
+    controllerAs: 'alterCtrl'
+  }).when('/goals/view', {
     templateUrl: 'views/goal.html',
     controllerAs: 'viewGoalCtrl'
   }).otherwise({
@@ -19,41 +19,60 @@ angular.module('goalmgr', ['ngRoute', 'frontend-main', 'templates']).config(func
   });
 }).constant('API_SERVER', 'localhost:3000');
 
-angular.module('goalmgr').controller('alterCtrl', ['altSvc', function(altSvc) {}]).controller('newAlterCtrl', [
-  'altSvc', function(altSvc) {
-    var alter, newalt;
-    newalt = this;
-    alter = {
+'use strict';
+angular.module('goalmgr').controller('alterCtrl', [
+  'altSvc', 'goalSvc', function(altSvc, goalSvc) {
+    var altctrl;
+    altctrl = this;
+  }
+]);
+
+'use strict';
+angular.module('goalmgr').controller('addAlterCtrl', [
+  'altSvc', 'goalSvc', '$location', function(altSvc, goalSvc, $location) {
+    var altctrl;
+    altctrl = this;
+    this.supergoal = goalSvc.getCurrent();
+    this.alter = {
       description: "",
-      goalId: goalId
+      goalId: null,
+      Subgoals: []
     };
-    this.addGoal = function() {};
-    return this.createAlter = function() {
-      return altSvc.add(alter).then(function() {
+    console.log(altctrl.supergoal);
+    this.addSubgoal = function() {};
+    this.createAlter = function() {
+      altSvc.add(alter).then(function() {
         return console.log("success");
       });
     };
+    this.back = function() {
+      $location.path('goals/view');
+    };
   }
-]).controller('viewAlterCtrl', [
-  'altSvc', function(altSvc) {
-    var alt, alter;
-    alt = this;
+]);
+
+'use strict';
+angular.module('goalmgr').controller('viewAlterCtrl', [
+  'altSvc', '$routeParams', function(altSvc, $routeParams) {
+    var altctrl, alter;
+    altctrl = this;
     alter = {
       description: "",
       goalId: 0
     };
     this.getAlter = function() {
-      return altSvc.getById().then(function(data) {
+      altSvc.getById().then(function(data) {
         return alter = data;
       });
     };
-    return this.addGoal = function() {};
+    this.addGoal = function() {};
   }
 ]);
 
 'app controller goes here';
 
 
+'use strict';
 angular.module('goalmgr').controller('goalsCtrl', [
   'goalSvc', '$location', function(goalSvc, $location) {
     var goalctrl;
@@ -62,25 +81,25 @@ angular.module('goalmgr').controller('goalsCtrl', [
     this.pendant = [];
     this.lastachiev = [];
     this.gettopgoals = function() {
-      goalSvc.getTop().then((function(data) {
+      goalSvc.getTop().then(function(data) {
         return goalctrl.topgoals = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los objetivos de alto nivel");
-      }));
+      });
     };
     this.getpendant = function() {
-      goalSvc.getPendant().then((function(data) {
+      goalSvc.getPendant().then(function(data) {
         return goalctrl.pendant = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los objetivos pendientes");
-      }));
+      });
     };
     this.getlastachieved = function() {
-      goalSvc.getLastAchieved().then((function(data) {
+      goalSvc.getLastAchieved().then(function(data) {
         return goalctrl.lastachiev = data;
       }, function(data) {
         return console.log("Error al tratar de obtener los últimos objetivos conseguidos");
-      }));
+      });
     };
     this.newGoal = function() {
       $location.path('goals/new');
@@ -89,56 +108,93 @@ angular.module('goalmgr').controller('goalsCtrl', [
     goalctrl.getpendant();
     goalctrl.getlastachieved();
     this.viewDetails = function(goalid) {
-      return $location.path('goals/' + goalid);
+      console.log(goalid);
+      goalSvc.getById(goalid).then(function(data) {
+        goalSvc.setCurrent(data);
+        $location.path('goals/view');
+      });
     };
   }
-]).controller('addGoalCtrl', [
+]);
+
+'use strict';
+angular.module('goalmgr').controller('addGoalCtrl', [
   'goalSvc', '$location', function(goalSvc, $location) {
-    var goalsctrl;
-    goalsctrl = this;
+    var goalctrl;
+    goalctrl = this;
     this.newgoal = {
       name: "",
-      priority: 0,
-      achieved: false
+      priority: 0
     };
-    this.priorities = ['high', 'regular', 'low'];
+    this.priorities = [
+      {
+        id: 1,
+        name: 'high'
+      }, {
+        id: 2,
+        name: 'regular'
+      }, {
+        id: 3,
+        name: 'low'
+      }
+    ];
     this.createGoal = function() {
       goalSvc.add(goalctrl.newgoal).then(function(data) {
         $location.path('editgoal');
       });
     };
   }
-]).controller('viewGoalCtrl', [
-  'goalSvc', 'altSvc', '$location', '$routeParams', function(goalSvc, altSvc, $location, $routeParams) {
+]);
+
+'use strict';
+angular.module('goalmgr').controller('viewGoalCtrl', [
+  'goalSvc', 'altSvc', '$location', function(goalSvc, altSvc, $location) {
     var goalctrl;
     goalctrl = this;
-    this.goal = null;
+    this.goal = goalSvc.getCurrent();
     this.alternatives = [];
     this.meta = [];
-    this.currgoal = $routeParams.goalid;
-    this.priorities = ['high', 'regular', 'low'];
-    this.getgoal = function() {
-      return goalScv.getById().then(function(data) {
-        var goal;
-        goal = data;
-        return goalctrl.getalternatives();
-      });
-    };
+    this.currgoal = this.priorities = [
+      {
+        id: 1,
+        name: 'high'
+      }, {
+        id: 2,
+        name: 'regular'
+      }, {
+        id: 3,
+        name: 'low'
+      }
+    ];
     this.getalternatives = function() {
-      return altSvc.getForGoal(this.currgoal).then(function(data) {
-        return goalctrl.alternatives = data;
+      altSvc.getForGoal(goalctrl.goal.id).then(function(data) {
+        goalctrl.alternatives = data;
       });
     };
     this.editgoal = function() {
-      return goalSvc.update(goalctrl.goal).then(function(data) {});
+      goalSvc.update(goalctrl.goal).then(function(data) {});
     };
     this.addAlternative = function() {
-      return $location.path('alternatives/new');
+      goalSvc.setCurrent(goalctrl.goal);
+      $location.path('alternatives/new');
     };
-    this.getmetagoals = function() {
-      return goalSvc.getMeta().then(function(data) {
-        return goalctrl.meta = data;
+    this.getsupergoals = function() {
+      goalSvc.getMeta(goalctrl.goal.id).then(function(data) {
+        goalctrl.meta = data;
       });
+    };
+    goalctrl.getalternatives();
+    goalctrl.getsupergoals();
+    this.back = function() {
+      $location.path('goals/');
+    };
+    this.gotogoal = function(goalid) {
+      goalSvc.getById(goalid).then(function(data) {
+        $location.path('goals/view');
+      });
+    };
+    this.gotoalt = function(altid) {
+      $location.path('alternatives/' + altid);
     };
   }
 ]);
@@ -160,6 +216,9 @@ angular.module('goalmgr').service('altSvc', [
     genericReq = function(httpRequest) {
       var deferred;
       deferred = $q.defer();
+      httpRequest.headers = httpRequest.headers || {
+        'Content-Type': 'application/json'
+      };
       $http(httpRequest).success(function(data, status, headers, config) {
         return deferred.resolve(data);
       }).error(function(data, status, headers, config) {
@@ -210,9 +269,13 @@ angular.module('goalmgr').service('goalSvc', [
   '$q', '$http', 'API_SERVER', function($q, $http, API_SERVER) {
     var genericReq, goalSvc;
     goalSvc = this;
+    this.currentgoal = null;
     genericReq = function(httpRequest) {
       var deferred;
       deferred = $q.defer();
+      httpRequest.headers = httpRequest.headers || {
+        'Content-Type': 'application/json'
+      };
       $http(httpRequest).success(function(data, status, headers, config) {
         return deferred.resolve(data);
       }).error(function(data, status, headers, config) {
@@ -277,6 +340,29 @@ angular.module('goalmgr').service('goalSvc', [
           url: 'http://' + API_SERVER + '/goals/' + id
         };
         return genericReq(httpReq);
+      },
+      update: function(goal) {
+        var httpReq;
+        httpReq = {
+          method: 'PUT',
+          url: 'http://' + API_SERVER + '/goals/' + goal.id,
+          data: goal
+        };
+        return genericReq(httpReq);
+      },
+      getMeta: function(id) {
+        var httpReq;
+        httpReq = {
+          method: 'GET',
+          url: 'http://' + API_SERVER + '/goals/meta/' + id
+        };
+        return genericReq(httpReq);
+      },
+      setCurrent: function(goal) {
+        goalSvc.currentgoal = goal;
+      },
+      getCurrent: function() {
+        return goalSvc.currentgoal;
       }
     };
   }
