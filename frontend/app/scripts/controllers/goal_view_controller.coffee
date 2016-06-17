@@ -49,7 +49,7 @@ angular.module 'goalmgr'
       return
 
     # returns a list of pairs (supergoal, alternative), where <goal> is a subgoal of <supergoal> through <alternative>
-    this.getsupergoal = () ->
+    this.getsupergoals = () ->
       goalSvc.getMeta(goalctrl.goal.id)
       .then (data) ->
         goalctrl.meta = data
@@ -69,7 +69,7 @@ angular.module 'goalmgr'
         $location.path 'goals/view'
         return
       return
-      
+
 
     this.gotoalt = (altid) ->
       $location.path 'alternatives/'+altid

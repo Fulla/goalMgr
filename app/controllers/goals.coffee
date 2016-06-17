@@ -4,7 +4,7 @@ models = require('../models/index')
 # Return the list of top level goals (goals that are not subgoals of any goal)
 router.get '/top', (req,res,next) ->
   models.Goal.findAll
-    atributes: ['id', 'name', 'createdAt']
+    attributes: ['id', 'name', 'createdAt']
     include: [
       model: models.Alternative
       as: 'Metagoals'
@@ -15,18 +15,20 @@ router.get '/top', (req,res,next) ->
   .then (top) ->
     res.json top
 
+# returns all un-achieved goals
 router.get '/pendant', (req,res,next) ->
     models.Goal.findAll
-      atributes: ['id', 'name', 'createdAt']
+      attributes: ['id', 'name', 'createdAt']
       where: [
         achieved: false
       ]
     .then (pendant) ->
       res.json pendant
 
+# returns the last 10 achieved goals // maybe later I can change "limit" to be a parameter
 router.get '/achieved', (req,res,next) ->
     models.Goal.findAll
-      atributes: ['id', 'name', 'createdAt']
+      attributes: ['id', 'name', 'createdAt']
       where: [
         achieved: true
       ]
@@ -35,8 +37,19 @@ router.get '/achieved', (req,res,next) ->
     .then (achieved) ->
       res.json achieved
 
-router.get '/meta', (req,res,next) ->
-    res.send()
+# returns a list of alternatives to which goal (id) serve as subgoal, along with their corresponding supergoals
+router.get '/meta/:id', (req,res,next) ->
+    models.Goal.find
+      where: [
+        id: req.params.id
+      ]
+    .then (goal) ->
+      goal.getSupergoals(
+        include: Goal
+        as: 'Goal'
+      )
+    .then (supergoals) ->
+      res.json supergoals
 
 
 # Return a goal with id:id
@@ -66,7 +79,6 @@ router.put '/:id', (req,res,next) ->
     ]
   .then (goal) ->
     if goal
-      console.log goal
       if req.body.achieved == true
         adate = new Date
       else
@@ -76,9 +88,18 @@ router.put '/:id', (req,res,next) ->
         priority: req.body.priority
         achieved: req.body.achieved
         achdate: adate
-      .then (goal) ->
-        res.json goal
+  .then (goal) ->
+    res.json goal
 
+# get subgoals (requirements) for a given alternative
+router.get '/subgoals/:altid', (req, res, next) ->
+  models.Goal.findAll
+    attributes: ['id','name','achieved']
+    include:
+      model: Alternative
+      as: Metagoals
+      where:
+        id: req.params.altid
 
 
 module.exports = router
