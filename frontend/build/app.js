@@ -1,4 +1,4 @@
-angular.module('goalmgr', ['ngRoute', 'frontend-main', 'templates']).config(function($routeProvider) {
+angular.module('goalmgr', ['ngRoute', 'frontend-main', 'templates', 'ui.grid']).config(function($routeProvider) {
   $routeProvider.when('/goals', {
     templateUrl: 'views/goalslist.html',
     controllerAs: 'goalsCtrl'
@@ -33,13 +33,16 @@ angular.module('goalmgr').controller('addAlterCtrl', [
     var altctrl;
     altctrl = this;
     this.supergoal = goalSvc.getCurrent();
+    this.selecpanel = false;
+    this.possiblesubgoals = [];
     this.alter = {
       description: "",
-      goalId: null,
+      goalId: altctrl.supergoal.id,
       Subgoals: []
     };
-    console.log(altctrl.supergoal);
-    this.addSubgoal = function() {};
+    this.addSubgoal = function() {
+      altctrl.selecpanel = true;
+    };
     this.createAlter = function() {
       altSvc.add(alter).then(function() {
         return console.log("success");
@@ -47,6 +50,24 @@ angular.module('goalmgr').controller('addAlterCtrl', [
     };
     this.back = function() {
       $location.path('goals/view');
+    };
+    this.gridgoals = {
+      data: [],
+      enableFiltering: true
+    };
+    this.getpossiblesubgoals = function() {
+      return altSvc.getPossibleSub(altctrl.supergoal.id).then(function(data) {
+        console.log(data);
+        altctrl.possiblesubgoals = data;
+        altctrl.gridgoals.data = data;
+      });
+    };
+    altctrl.getpossiblesubgoals();
+    this.closepanel = function() {
+      altctrl.selecpanel = false;
+    };
+    this.openpanel = function() {
+      altctrl.selecpanel = true;
     };
   }
 ]);
@@ -240,6 +261,14 @@ angular.module('goalmgr').service('altSvc', [
         httpReq = {
           method: 'GET',
           url: 'http://' + API_SERVER + '/alt/' + id
+        };
+        return genericReq(httpReq);
+      },
+      getPossibleSub: function(goalid) {
+        var httpReq;
+        httpReq = {
+          method: 'GET',
+          url: 'http://' + API_SERVER + '/alt/possiblesub/' + goalid
         };
         return genericReq(httpReq);
       },

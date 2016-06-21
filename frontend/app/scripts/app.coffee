@@ -1,4 +1,4 @@
-angular.module 'goalmgr', [ 'ngRoute','frontend-main','templates' ]
+angular.module 'goalmgr', [ 'ngRoute','frontend-main','templates', 'ui.grid' ]
 
   .config ($routeProvider) ->
     $routeProvider

@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) ->
       classMethods:
         associate: (models) ->
           Goal.belongsToMany models.Alternative,  # the alternatives to which this goal serves as subgoal
-            as: 'Metagoals',
+            as: 'Metagoals'
             through: 'GoalToAlternative'
-          Goal.hasMany models.Alternative  # the alternative options to solve this goal
+          Goal.hasMany models.Alternative,  # the alternative options to solve this goal
             as: 'Options'
           return
     Goal

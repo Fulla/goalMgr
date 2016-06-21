@@ -4,7 +4,7 @@ models = require('../models/index')
 # Return the list of top level goals (goals that are not subgoals of any goal)
 router.get '/top', (req,res,next) ->
   models.Goal.findAll
-    attributes: ['id', 'name', 'createdAt']
+    attributes: ['id', 'name', 'priority', 'createdAt', 'achieved']
     include: [
       model: models.Alternative
       as: 'Metagoals'
@@ -18,7 +18,7 @@ router.get '/top', (req,res,next) ->
 # returns all un-achieved goals
 router.get '/pendant', (req,res,next) ->
     models.Goal.findAll
-      attributes: ['id', 'name', 'createdAt']
+      attributes: ['id', 'name', 'priority', 'createdAt']
       where: [
         achieved: false
       ]
@@ -28,7 +28,7 @@ router.get '/pendant', (req,res,next) ->
 # returns the last 10 achieved goals // maybe later I can change "limit" to be a parameter
 router.get '/achieved', (req,res,next) ->
     models.Goal.findAll
-      attributes: ['id', 'name', 'createdAt']
+      attributes: ['id', 'name', 'priority', 'createdAt']
       where: [
         achieved: true
       ]
@@ -44,10 +44,11 @@ router.get '/meta/:id', (req,res,next) ->
         id: req.params.id
       ]
     .then (goal) ->
-      goal.getSupergoals(
-        include: Goal
-        as: 'Goal'
-      )
+      goal.getMetagoals
+        include: [
+          model: models.Goal
+          as: 'Goal'
+        ]
     .then (supergoals) ->
       res.json supergoals
 
@@ -94,10 +95,10 @@ router.put '/:id', (req,res,next) ->
 # get subgoals (requirements) for a given alternative
 router.get '/subgoals/:altid', (req, res, next) ->
   models.Goal.findAll
-    attributes: ['id','name','achieved']
+    attributes: ['id','name', 'priority', 'achieved']
     include:
-      model: Alternative
-      as: Metagoals
+      model: models.Alternative
+      as: 'Metagoals'
       where:
         id: req.params.altid
 

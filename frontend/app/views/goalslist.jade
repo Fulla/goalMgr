@@ -19,7 +19,7 @@ div(ng-controller='goalsCtrl as goals')
       li(ng-repeat="tg in goals.pendant")
         p Goal description: {{tg.name}}
         p Goal priority: {{tg.priority}}
-        p Creation date: {{tg.creatdate}}
+        p Creation date: {{tg.createdAt}}
         button(ng-click="goals.viewDetails(tg.id)") Details
         //- ver de dar las opciones de ordenar por *creatdate *priority 
       

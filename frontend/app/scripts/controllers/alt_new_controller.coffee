@@ -6,15 +6,16 @@ angular.module 'goalmgr'
   (altSvc,goalSvc,$location) ->
     altctrl = this
     this.supergoal = goalSvc.getCurrent()
+    this.selecpanel = false
+    this.possiblesubgoals = []
     this.alter =
       description: ""
-      goalId: null
+      goalId: altctrl.supergoal.id
       Subgoals: []
-
-    console.log altctrl.supergoal
 
     this.addSubgoal = () ->
       # opens panel to select a subgoal
+      altctrl.selecpanel = true
       return
 
     this.createAlter = () ->
@@ -25,6 +26,33 @@ angular.module 'goalmgr'
 
     this.back = () ->
       $location.path 'goals/view'
+      return
+
+    # Goal selection panel
+    # this.goalfilter = ""
+    this.gridgoals =
+      data: []
+      enableFiltering: true
+
+    this.getpossiblesubgoals = () ->
+      altSvc.getPossibleSub(altctrl.supergoal.id)
+      .then (data) ->
+        console.log data
+        altctrl.possiblesubgoals = data
+        altctrl.gridgoals.data = data
+        return
+    # this.filtergoals = () ->
+    #
+    #   return
+
+    altctrl.getpossiblesubgoals()
+
+    this.closepanel = () ->
+      altctrl.selecpanel = false
+      return
+
+    this.openpanel = () ->
+      altctrl.selecpanel = true
       return
 
     return

@@ -23,6 +23,11 @@ angular.module 'goalmgr'
           method: 'GET'
           url: 'http://'+API_SERVER+'/alt/'+ id
         genericReq(httpReq)
+      getPossibleSub: (goalid) ->
+        httpReq =
+          method: 'GET'
+          url: 'http://'+API_SERVER+'/alt/possiblesub/'+ goalid
+        genericReq(httpReq)
       add: (alt,goalid) ->
         httpReq =
           method: 'POST'

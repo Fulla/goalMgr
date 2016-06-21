@@ -8,7 +8,7 @@ div(ng-controller="addAlterCtrl as altctrl")
       input(type="text" ng-model="altctrl.alter.description")
     div(class='listblock')  
       label Add new subgoal for solution completion:
-      button(ng-click="altctrl.addGoal()") Add subgoal
+      button(ng-click="altctrl.openpanel()") Add subgoal
     div(class='listblock')
       label Solution option preview:
       div(class='preview')
@@ -20,7 +20,10 @@ div(ng-controller="addAlterCtrl as altctrl")
       //- label Save solution option and return to supergoal description
       button(ng-click="altctrl.createAlter()") Save option
       button(ng-click="altctrl.back()") Cancel
-  div(class='panel')
+  div(class='panel' ng-show='altctrl.selecpanel')
     h3 Select a subgoal:
+    //- input(type="text" ng-model="altctrl.goalfilter" ng-change="altctrl.filtergoals()")
+    div(ng-grid="altctrl.gridgoals" class="gridgoals")
+    button(ng-click="altctrl.closepanel") Close
     
     //- div(ng-model="altctrl.grid")

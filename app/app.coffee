@@ -11,7 +11,11 @@ routes = require('./config/routes')(app)
 app.set('port',3000)
 
 # models.sequelize.sync() crea las tablas que no existen en la db
-models.sequelize.sync( logging: console.log ).then () ->
+models.sequelize.sync()
+  # logging: console.log
+  # force: true
+ # )
+ .then () ->
   server = app.listen(app.get('port'), ->
     console.log 'Express server listening on port ' + server.address().port
     return

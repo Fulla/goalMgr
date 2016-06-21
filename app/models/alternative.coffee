@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) ->
     associate: (models) ->
         Alternative.belongsToMany models.Goal,  # the subgoals (conditions) to achieve the supergoal through this alternative
           as: 'Subgoals'
-          through: 'GoalToAlternative',
+          through: 'GoalToAlternative'
         Alternative.belongsTo models.Goal,  # the supergoal to which this is a solution option
           as: 'Goal'
         return
